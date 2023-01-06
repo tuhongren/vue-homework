@@ -110,16 +110,15 @@
         methods:{
           checkToken(){
             axios.get(`${this.url}v2/api/${this.path}/admin/products`)
-							.then(res => {
+              .then(res => {
                 this.productList = res.data.products;
-							})
-							.catch(err =>{
+              })
+              .catch(err =>{
                 alert('無權限瀏覽，請重新登入')
                 window.location = "login.html";
-							});
+              });
           },
           clickDetail(item){
-            console.log(item)
             this.tempProduct = item;
           }
         },
