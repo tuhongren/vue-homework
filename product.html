@@ -60,7 +60,7 @@
                     <span v-else >未啟用</span>
                   </td>
                   <td width="120">
-                    <button type="button" class="btn btn-primary" @click="clickDetail(item)">查看細節</button>
+                    <button type="button" class="btn btn-primary" @click="clickProductDetail(item)">查看細節</button>
                   </td>
                 </tr>
               </tbody>
@@ -90,7 +90,7 @@
                 <img v-if="subImage" :src="subImage" :alt="`小圖 ${index}`" class="images m-2">
               </template>
             </template>
-            <p class="text-secondary">請選擇一個商品查看</p>
+            <p v-else class="text-secondary">請選擇一個商品查看</p>
           </div>
         </div>
       </div>
@@ -109,17 +109,25 @@
         },
         methods:{
           checkToken(){
-            axios.get(`${this.url}v2/api/${this.path}/admin/products`)
-							.then(res => {
-                this.productList = res.data.products;
-							})
-							.catch(err =>{
-                alert('無權限瀏覽，請重新登入')
-                window.location = "index.html";
-							});
+            axios.post(`${this.url}v2/api/user/check`)
+              .then(res => {
+                this.getProducts();
+              })
+              .catch(err =>{
+                alert(err.response.data.message);
+                window.location = "login.html";
+              });
           },
-          clickDetail(item){
-            console.log(item)
+          getProducts(){
+            axios.get(`${this.url}v2/api/${this.path}/admin/products`)
+              .then(res => {
+                this.productList = res.data.products;
+              })
+              .catch(err =>{
+                alert(err.response.data.message);
+              });
+          },
+          clickProductDetail(item){
             this.tempProduct = item;
           }
         },
