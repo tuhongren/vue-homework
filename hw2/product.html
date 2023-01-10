@@ -116,7 +116,7 @@
               .catch(err =>{
                 alert(err.response.data.message);
                 window.location = "login.html";
-              });g
+              });
           },
           getProducts(){
             axios.get(`${this.url}v2/api/${this.path}/admin/products`)
