@@ -8,8 +8,8 @@ export default {
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li v-for="page in pages.total_pages" :key="page+'page'" class="page-item" :class="{active: page === pages.current_page }">
-        <a class="page-link" href="#"  @click="getProducts(page)">{{page}}</a>
+      <li v-for="page in pages.total_pages" :key="page+'page'" class="page-item" :class="{'active': page === pages.current_page }">
+        <a class="page-link" href="#"  @click.prevent="$emit('change-page',page)">{{page}}</a>
       </li>
       <li class="page-item" :class="{disabled: !pages.has_next}">
         <a class="page-link" href="#" @click="getProducts(pages.current_page+1)" aria-label="Next">
