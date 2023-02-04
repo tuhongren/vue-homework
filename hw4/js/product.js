@@ -2,14 +2,15 @@ import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 import productModal from './../components/productModal.js' ;
 import deleteProductModal from './../components/delProductModal.js' ;
 import pagination from './../components/page.js' ;
+
 let openProductModal = '';
 let delProductModal = '';
+const url = 'https://vue3-course-api.hexschool.io/' ;
+const pathName = 'rainj' ;
 
 createApp({
   data(){
     return {
-      url:"https://vue3-course-api.hexschool.io/",
-      pathName:'rainj',
       productList:[],
       getType:'',
       tmpProduct:{
@@ -33,7 +34,7 @@ createApp({
   },
   methods:{
     checkToken(){
-      axios.post(`${this.url}v2/api/user/check`)
+      axios.post(`${url}v2/api/user/check`)
         .then(res => {
           this.getProducts(1);
         })
@@ -43,7 +44,7 @@ createApp({
         });
     },
     getProducts(page = 1){ //預設參數
-      axios.get(`${this.url}v2/api/${this.pathName}/admin/products?page=${page}`)
+      axios.get(`${url}v2/api/${pathName}/admin/products?page=${page}`)
         .then(res => {
           this.productList = res.data.products;
           this.page = res.data.pagination;
@@ -69,7 +70,7 @@ createApp({
     },
     updateModal(product){
       if(this.getType === 'new') {
-        axios.post(`${this.url}v2/api/${this.pathName}/admin/product`,{data:product})
+        axios.post(`${url}v2/api/${pathName}/admin/product`,{data:product})
           .then(res => {
             this.getProducts(1);
             openProductModal.hide();
@@ -78,7 +79,7 @@ createApp({
             alert(err.data.message);
           });
       } else {
-        axios.put(`${this.url}v2/api/${this.pathName}/admin/product/${this.tmpProduct.id}`,{data:this.tmpProduct})
+        axios.put(`${url}v2/api/${pathName}/admin/product/${this.tmpProduct.id}`,{data:this.tmpProduct})
           .then(res => {
             this.getProducts(1);
             openProductModal.hide();
@@ -89,7 +90,7 @@ createApp({
       }
     },
     deleteModal(){
-      axios.delete(`${this.url}v2/api/${this.pathName}/admin/product/${this.tmpProduct.id}`)
+      axios.delete(`${url}v2/api/${pathName}/admin/product/${this.tmpProduct.id}`)
         .then(res => {
           delProductModal.hide();
           this.getProducts(1);

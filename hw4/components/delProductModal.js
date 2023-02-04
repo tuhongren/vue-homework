@@ -1,5 +1,5 @@
 export default {
-  props:['deleteModal'],
+  props:['deleteModal','tmpProduct'],
   template: `
   <div class="modal-dialog">
     <div class="modal-content border-0">
@@ -11,7 +11,7 @@ export default {
       </div>
       <div class="modal-body">
         是否刪除
-        <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+        <strong class="text-danger">{{tmpProduct.title}}</strong> 商品(刪除後將無法恢復)。
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">

@@ -18,7 +18,7 @@ export default {
             <img class="img-fluid" :src="tmpProduct.imageUrl">
           </div>
           <h3 class="mb-3">多圖新增</h3>
-          <template v-if="tmpProduct.imagesUrl">
+          <template v-if="Array.isArray(tmpProduct.imagesUrl)">
             <div class="mb-1" v-for="(image, index) in tmpProduct.imagesUrl" :key="index">
               <div class="mb-3">
                 <label for="imageUrl" class="form-label">圖片網址</label>
@@ -27,20 +27,20 @@ export default {
               </div>
               <img class="img-fluid" :src="image">
             </div>
-            <div v-if="!tmpProduct.imagesUrl || tmpProduct.imagesUrl[tmpProduct.imagesUrl-1]">
+            <div v-if="!tmpProduct.imagesUrl.length || tmpProduct.imagesUrl[tmpProduct.imagesUrl-1]">
               <button class="btn btn-outline-primary btn-sm d-block w-100"
-                @click="uploadImages('new')">
+                @click.prevent="uploadImages('new')">
                 新增圖片
               </button>
             </div>
             <div v-else>
-              <button class="btn btn-outline-danger btn-sm d-block w-100" @click="uploadImages('delete')">
+              <button class="btn btn-outline-danger btn-sm d-block w-100" @click.prevent="uploadImages('delete')">
                 刪除圖片
               </button>
             </div>
           </template>
           <div v-else>
-            <button class="btn btn-outline-primary btn-sm d-block w-100" @click="uploadImages('new')">
+            <button class="btn btn-outline-primary btn-sm d-block w-100" @click.prevent="uploadImages('new')">
               新增圖片
             </button>
           </div>
@@ -53,7 +53,7 @@ export default {
           <div class="row">
             <div class="mb-3 col-md-6">
               <label for="category" class="form-label">分類</label>
-              <input id="category" type="text" class="form-control"placeholder="請輸入分類" v-model="tmpProduct.category">
+              <input id="category" type="text" class="form-control" placeholder="請輸入分類" v-model="tmpProduct.category">
             </div>
             <div class="mb-3 col-md-6">
               <label for="price" class="form-label">單位</label>
@@ -73,11 +73,11 @@ export default {
           <hr>
           <div class="mb-3">
             <label for="description" class="form-label">產品描述</label>
-            <textarea id="description" type="text" class="form-control"placeholder="請輸入產品描述" v-model="tmpProduct.description"></textarea>
+            <textarea id="description" type="text" class="form-control" placeholder="請輸入產品描述" v-model="tmpProduct.description"></textarea>
           </div>
           <div class="mb-3">
             <label for="content" class="form-label">說明內容</label>
-            <textarea id="description" type="text" class="form-control"placeholder="請輸入說明內容" v-model="tmpProduct.content"></textarea>
+            <textarea id="description" type="text" class="form-control" placeholder="請輸入說明內容" v-model="tmpProduct.content"></textarea>
           </div>
           <div class="mb-3">
             <div class="form-check">
@@ -92,7 +92,7 @@ export default {
       <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
         取消
       </button>
-      <button type="button" class="btn btn-primary" @click="updateModal(tmpProduct)">
+      <button type="button" class="btn btn-primary" @click.prevent="updateModal(tmpProduct)">
         確認
       </button>
     </div>
