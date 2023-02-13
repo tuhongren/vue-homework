@@ -100,7 +100,8 @@ createApp({
         });
     },
     uploadImages(type){
-      if(type === 'new'){
+      if(type === 'new' || type === 'edit'){
+        this.tmpProduct.imagesUrl = [];
         this.tmpProduct.imagesUrl.push('');
       } else if(type === 'delete'){
         this.tmpProduct.imagesUrl.pop();

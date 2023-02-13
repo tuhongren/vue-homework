@@ -40,7 +40,7 @@ export default {
             </div>
           </template>
           <div v-else>
-            <button class="btn btn-outline-primary btn-sm d-block w-100" @click.prevent="uploadImages('new')">
+            <button class="btn btn-outline-primary btn-sm d-block w-100" @click.prevent="uploadImages(getType)">
               新增圖片
             </button>
           </div>
