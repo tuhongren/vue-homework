@@ -46,11 +46,13 @@ const app = Vue.createApp({
       productId:'',
       cart:{},
       loadingItem:'',
-      user:{
-        name: '',
-        email: '',
-        tel: '',
-        address: '',
+      form:{
+        user:{
+          name: '',
+          email: '',
+          tel: '',
+          address: '',
+        },
         message: ''
       },
     }
@@ -119,9 +121,27 @@ const app = Vue.createApp({
           this.getCart();
         }) ;
     },
+    isPhone(value) {
+      const phoneNumber = /^(09)[0-9]{8}$/
+      return phoneNumber.test(value) ? true : '需要正確的電話號碼'
+    },
     createOrder(){
-      console.log('createOrder')
-      
+      let data = this.form;
+      axios.post(`${url}v2/api/${pathName}/order`,{data})
+        .then(res => {
+          alert(res.data.message);
+          this.form.user = {
+            name: '',
+            email: '',
+            tel: '',
+            address: ''
+          };
+          this.form.message = '';
+          this.getCart();
+        })
+        .catch(err => {
+          alert(err.data.message);
+        }) ;
     },
   },
   mounted(){
