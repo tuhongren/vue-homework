@@ -1,41 +1,43 @@
 import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
+console.log(VeeValidate)
+Object.keys(VeeValidateRules).forEach(rule => {
+  if (rule !== 'default') {
+    VeeValidate.defineRule(rule, VeeValidateRules[rule]);
+  }
+});
+
+// 讀取外部的資源
+VeeValidateI18n.loadLocaleFromURL('./zh_TW.json');
+
+// Activate the locale
+VeeValidate.configure({
+  generateMessage: VeeValidateI18n.localize('zh_TW'),
+  validateOnInput: true, // 調整為：輸入文字時，就立即進行驗證
+});
+
 const url = 'https://vue3-course-api.hexschool.io/' ;
 const pathName = 'rainj' ;
 
 const productModal = {
-  props:['id','addToCart','openModal'],
+  props:['tempProduct','addToCart'],
   template:'#userProductModal',
   data(){
     return {
-      tempProduct:{},
       modal:{},
       qty:1,
     }
   },
-  watch:{
-    id(){
-      console.log('------',this.id)
-      axios.get(`${url}v2/api/${pathName}/product/${this.id}`)
-        .then(res => {
-          this.tempProduct = res.data.product;
-          this.modal.show();
-        }) ;
-    }
-  },
   methods:{
+    openModal(){
+      this.modal.show();
+    },
     hideModal(){
       this.modal.hide();
     }
   },
   mounted(){
     this.modal = new bootstrap.Modal(this.$refs.modal);
-    this.$refs.modal.addEventListener('hidden.bs.modal', function (event) {
-      // console.log('ID[',id)
-      console.log(event)
-      console.log('ID----[',event.id)
-      this.openModal('');
-    });
   },
 }
 
@@ -43,33 +45,48 @@ const app = createApp({
   data(){
     return {
       products:{},
+      tempProduct:{},
       productId:'',
       cart:{},
       loadingItem:'',
+      user:{
+        name: '',
+        email: '',
+        tel: '',
+        address: '',
+        message: ''
+      },
     }
   },
   components:{
     productModal,
   },
   methods:{
-    init(){
+    getProductList(){
       axios.get(`${url}v2/api/${pathName}/products/all`)
         .then(res => {
           this.products = res.data.products;
         }) ;
     },
-    openModal(Id){
-      console.log('OuterID',Id)
-      this.productId = Id ;
+    getProduct(id){
+      this.loadingItem = id;
+      axios.get(`${url}v2/api/${pathName}/product/${id}`)
+        .then(res => {
+          this.tempProduct = res.data.product;
+          this.loadingItem = '';
+          this.$refs.productModal.openModal();
+        }) ;
     },
     addToCart(product_id,qty = 1){
       const data = {
         product_id,
         qty
       };
+      this.loadingItem = product_id;
       axios.post(`${url}v2/api/${pathName}/cart`,{data})
         .then(res => {
           this.$refs.productModal.hideModal();
+          this.loadingItem = '';
           this.getCart();
         }) ;
     },
@@ -99,11 +116,24 @@ const app = createApp({
           this.getCart();
         }) ;
     },
+    deleteCart(){
+      axios.delete(`${url}v2/api/${pathName}/carts`)
+        .then(res => {
+          this.getCart();
+        }) ;
+    },
+    createOrder(){
+      console.log('createOrder')
+    },
   },
   mounted(){
-    this.init();
+    this.getProductList();
     this.getCart();
   },
 });
+
+app.component('VForm', VeeValidate.Form);
+app.component('VField', VeeValidate.Field);
+app.component('ErrorMessage', VeeValidate.ErrorMessage);
 
 app.mount('#app');
