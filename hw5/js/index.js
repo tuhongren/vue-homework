@@ -1,6 +1,3 @@
-import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
-
-console.log(VeeValidate)
 Object.keys(VeeValidateRules).forEach(rule => {
   if (rule !== 'default') {
     VeeValidate.defineRule(rule, VeeValidateRules[rule]);
@@ -41,7 +38,7 @@ const productModal = {
   },
 }
 
-const app = createApp({
+const app = Vue.createApp({
   data(){
     return {
       products:{},
@@ -124,6 +121,7 @@ const app = createApp({
     },
     createOrder(){
       console.log('createOrder')
+      
     },
   },
   mounted(){
