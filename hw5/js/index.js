@@ -123,7 +123,7 @@ const app = Vue.createApp({
     },
     isPhone(value) {
       const phoneNumber = /^(09)[0-9]{8}$/
-      return phoneNumber.test(value) ? true : '需要正確的電話號碼'
+      return phoneNumber.test(value) ? true : '需要正確的電話號碼,範例:0912345678'
     },
     createOrder(){
       let data = this.form;
